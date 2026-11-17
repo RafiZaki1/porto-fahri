@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{width:1200px;height:800px;background:#F2F8F6;color:#1F2A37;font-family:Montserrat,Arial,sans-serif;font-size:14px;padding:26px 30px;overflow:hidden}
+  .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+  .title{font:600 22px Oswald,Arial;letter-spacing:2px;color:#0B3B36}
+  .title span{color:#0F9D8A}
+  .period{font-size:12px;color:#4D6B66;padding:7px 14px;border:1px solid rgba(15,60,50,.2);border-radius:999px}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:18px}
+  .card{border:1px solid rgba(15,60,50,.12);border-radius:14px;padding:18px 20px;background:linear-gradient(160deg,#FFFFFF,#E4F4EF);box-shadow:0 4px 14px rgba(15,60,50,.06)}
+  .lbl{font-size:11px;letter-spacing:1.5px;color:#4D6B66;text-transform:uppercase}
+  .val{font:600 30px Oswald,Arial;color:#0B3B36;margin-top:6px}
+  .up{color:#0F8A6E;font-size:12px;margin-top:4px}
+  .down{color:#C8102E;font-size:12px;margin-top:4px}
+  .main{display:grid;grid-template-columns:1.6fr 1fr;gap:16px}
+  .panel{border:1px solid rgba(15,60,50,.12);border-radius:14px;padding:18px 20px;background:#FFFFFF;box-shadow:0 4px 14px rgba(15,60,50,.06)}
+  .panel h4{font:600 14px Oswald,Arial;letter-spacing:2px;color:#0B3B36;margin-bottom:14px}
+  .chart{height:250px;display:flex;align-items:flex-end;gap:14px;padding-bottom:22px;position:relative;border-bottom:1px solid rgba(15,60,50,.15)}
+  .bars{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px}
+  .pair{display:flex;gap:4px;align-items:flex-end;height:100%}
+  .b{width:14px;border-radius:5px 5px 0 0}
+  .in{background:linear-gradient(#2EC4A6,#0F9D8A)}
+  .out{background:linear-gradient(#F4A261,#E76F51)}
+  .m{font-size:11px;color:#4D6B66;position:absolute;bottom:0}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th{text-align:left;font-weight:500;color:#4D6B66;padding:8px 0;border-bottom:1px solid rgba(15,60,50,.15);font-size:11px;letter-spacing:1px}
+  td{padding:10px 0;border-bottom:1px dashed rgba(15,60,50,.1)}
+  .pos{color:#0F8A6E;text-align:right}
+  .neg{color:#C8102E;text-align:right}
+  td:last-child,th:last-child{text-align:right}
+</style>
+</head>
+<body>
+  <div class="top">
+    <div class="title">CATATAN <span>UNTUNG</span></div>
+    <div class="period">Januari – Juni 2026</div>
+  </div>
+
+  <div class="cards">
+    <div class="card"><div class="lbl">Total Pemasukan</div><div class="val">Rp 48,6 jt</div><div class="up">▲ 12% dari bulan lalu</div></div>
+    <div class="card"><div class="lbl">Total Pengeluaran</div><div class="val">Rp 31,2 jt</div><div class="down">▲ 4% dari bulan lalu</div></div>
+    <div class="card" style="border-color:rgba(15,157,138,.6);box-shadow:0 0 22px rgba(15,157,138,.2)"><div class="lbl">Laba Bersih</div><div class="val" style="color:#0F9D8A">Rp 17,4 jt</div><div class="up">Margin 35,8%</div></div>
+  </div>
+
+  <div class="main">
+    <div class="panel">
+      <h4>GRAFIK BULANAN</h4>
+      <div class="chart">
+        <div class="bars"><div class="pair"><div class="b in" style="height:110px"></div><div class="b out" style="height:70px"></div></div><span class="m" style="position:static">Jan</span></div>
+        <div class="bars"><div class="pair"><div class="b in" style="height:130px"></div><div class="b out" style="height:82px"></div></div><span class="m" style="position:static">Feb</span></div>
+        <div class="bars"><div class="pair"><div class="b in" style="height:98px"></div><div class="b out" style="height:74px"></div></div><span class="m" style="position:static">Mar</span></div>
+        <div class="bars"><div class="pair"><div class="b in" style="height:150px"></div><div class="b out" style="height:88px"></div></div><span class="m" style="position:static">Apr</span></div>
+        <div class="bars"><div class="pair"><div class="b in" style="height:140px"></div><div class="b out" style="height:95px"></div></div><span class="m" style="position:static">Mei</span></div>
+        <div class="bars"><div class="pair"><div class="b in" style="height:172px"></div><div class="b out" style="height:101px"></div></div><span class="m" style="position:static">Jun</span></div>
+      </div>
+      <div style="font-size:11px;color:#4D6B66;margin-top:10px">
+        <span style="display:inline-block;width:10px;height:10px;background:#0F9D8A;border-radius:2px"></span> Pemasukan &nbsp;&nbsp;
+        <span style="display:inline-block;width:10px;height:10px;background:#E76F51;border-radius:2px"></span> Pengeluaran
+      </div>
+    </div>
+
+    <div class="panel">
+      <h4>TRANSAKSI TERBARU</h4>
+      <table>
+        <tr><th>TANGGAL</th><th>KETERANGAN</th><th>JUMLAH</th></tr>
+        <tr><td>17 Jun</td><td>Penjualan kue</td><td class="pos">+ 850.000</td></tr>
+        <tr><td>16 Jun</td><td>Beli bahan baku</td><td class="neg">- 420.000</td></tr>
+        <tr><td>15 Jun</td><td>Penjualan minuman</td><td class="pos">+ 615.000</td></tr>
+        <tr><td>14 Jun</td><td>Listrik & air</td><td class="neg">- 275.000</td></tr>
+        <tr><td>13 Jun</td><td>Penjualan catering</td><td class="pos">+ 1.200.000</td></tr>
+        <tr><td>12 Jun</td><td>Kemasan</td><td class="neg">- 130.000</td></tr>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

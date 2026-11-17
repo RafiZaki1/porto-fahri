@@ -1,0 +1,987 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portofolio Fahri · 2026</title>
+<meta name="description" content="Portofolio digital: desain dan teknisi jaringan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;500;600&family=Oswald:wght@300;600;700&display=swap" rel="stylesheet">
+<style>
+/* =====================================================
+   TOKEN WARNA (ubah di sini bila perlu)
+   ===================================================== */
+:root{
+  --bg:#05070B;
+  --navy:#06192E;
+  --glow-navy:#0A3A5C;
+  --accent:#1E90D6;
+  --red:#C8102E;
+  --silver-1:#E8EAEE;
+  --silver-2:#8B9099;
+  --text:#C9D1D9;
+  --text-2:#8B94A1;
+  --pill-on:#BFDDF5;
+  --pill-on-text:#0B2A44;
+  --pill-off-text:#AEB6C2;
+  --line:rgba(255,255,255,.12);
+  --radius:14px;
+}
+
+/* ---------- Reset & dasar ---------- */
+*{box-sizing:border-box}
+html{scroll-snap-type:y proximity;scroll-behavior:smooth}
+body{
+  margin:0;min-height:100vh;overflow-x:hidden;
+  background:var(--bg);color:var(--text);
+  font-family:Montserrat,system-ui,sans-serif;font-size:14px;line-height:1.7;
+}
+img{max-width:100%;display:block}
+button,a{font-family:inherit}
+:focus-visible{outline:2px solid var(--pill-on);outline-offset:3px}
+
+/* ---------- Lapisan latar global ---------- */
+.bg-fixed{
+  position:fixed;inset:0;z-index:-3;
+  background:linear-gradient(180deg,var(--bg) 0%,var(--navy) 55%,var(--bg) 100%);
+}
+.circuit{
+  position:fixed;inset:0;width:100%;height:100%;z-index:-2;
+  opacity:.16;pointer-events:none;
+}
+.grain{
+  position:fixed;inset:-50%;z-index:49;pointer-events:none;opacity:.04;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  animation:grain 1s steps(6) infinite;
+}
+@keyframes grain{
+  0%{transform:translate(0,0)}
+  50%{transform:translate(-3%,2%)}
+  100%{transform:translate(2%,-3%)}
+}
+.vignette{
+  position:fixed;inset:0;z-index:48;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.78) 100%);
+}
+
+/* Glow biru di sudut tiap layar */
+.glow{
+  position:absolute;width:min(60vw,720px);aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,var(--accent) 0%,transparent 68%);
+  opacity:.35;filter:blur(150px);pointer-events:none;z-index:-1;
+}
+.g-tl{top:-18%;left:-14%}
+.g-br{bottom:-22%;right:-16%}
+
+/* Kursor kustom (hanya perangkat dengan mouse) */
+.cur-dot,.cur-ring{display:none;position:fixed;top:0;left:0;pointer-events:none;z-index:200;border-radius:50%;transform:translate(-50%,-50%)}
+.cur-dot{width:6px;height:6px;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+.cur-ring{width:34px;height:34px;border:1px solid rgba(30,144,214,.75);transition:width .25s,height .25s,background .25s}
+.has-cursor .cur-dot,.has-cursor .cur-ring{display:block}
+.has-cursor, .has-cursor *{cursor:none}
+.cur-ring.hover{width:52px;height:52px;background:rgba(30,144,214,.12)}
+
+/* ---------- Layar (setiap bagian) ---------- */
+.screen{
+  position:relative;min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:110px 7vw 80px;
+  scroll-snap-align:start;isolation:isolate;overflow:hidden;
+}
+
+/* ---------- Navigasi atas ---------- */
+.topbar{
+  position:fixed;top:0;left:0;right:0;height:76px;z-index:60;
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  padding:0 4vw;pointer-events:none;
+}
+.logo{
+  justify-self:start;pointer-events:auto;text-decoration:none;
+  font:700 24px/1 Oswald,sans-serif;letter-spacing:2px;color:#fff;
+  border:2px solid #fff;padding:6px 10px 5px;transform:skewX(-10deg);
+}
+.logo span{display:inline-block;transform:skewX(10deg)}
+.pill-nav{
+  position:relative;pointer-events:auto;display:flex;gap:0;
+  padding:5px;border-radius:999px;
+  background:rgba(255,255,255,.04);border:1px solid var(--line);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.nav-ind{
+  position:absolute;top:5px;bottom:5px;left:0;width:0;opacity:0;
+  border-radius:999px;background:var(--pill-on);
+  transition:left .5s cubic-bezier(.2,.8,.2,1),width .5s cubic-bezier(.2,.8,.2,1),opacity .3s;
+}
+.nav-btn{
+  position:relative;z-index:1;border:0;background:none;cursor:pointer;
+  color:var(--pill-off-text);font:600 12px/1 Montserrat,sans-serif;letter-spacing:1.5px;
+  padding:11px 18px;border-radius:999px;transition:color .4s;
+}
+.nav-btn:hover{color:#fff}
+.nav-btn.active{color:var(--pill-on-text)}
+
+/* ---------- 1. SAMPUL (HERO) ---------- */
+.hero{padding:0;justify-content:flex-start}
+.arc-shape{
+  position:absolute;left:0;top:50%;transform:translateY(-50%);
+  height:min(74vh,700px);width:calc(min(74vh,700px) * 1.25); /* badan lurus di kiri, sisi kanan melengkung penuh (bentuk huruf D) */
+  background:var(--red);
+  border-radius:0 calc(min(74vh,700px) / 2) calc(min(74vh,700px) / 2) 0; /* sudut kanan melengkung setengah tinggi */
+  box-shadow:0 30px 70px rgba(0,0,0,.55);
+  z-index:1;
+}
+.arc-shape::after{ /* cahaya lembut di balik sosok */
+  content:"";position:absolute;left:30%;top:25%;width:70%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,rgba(30,144,214,.55),transparent 70%);
+  filter:blur(40px);z-index:-1;
+}
+.hero-photo{
+  position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  height:118%;z-index:2;
+}
+.hero-photo img{
+  height:100%;width:auto;
+  filter:drop-shadow(0 25px 30px rgba(0,0,0,.65));
+}
+.hero-text{
+  position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;
+  z-index:2;
+}
+/* Visual tengah sampul */
+.hero-core{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:min(62vw,720px);z-index:1;pointer-events:none;
+}
+.core-svg{width:100%;height:auto;display:block;overflow:visible}
+.spin-group{transform-box:view-box;transform-origin:250px 200px;animation:spin 48s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Judul: huruf naik satu per satu lalu berkilau pelan */
+.judul-huruf{display:inline-flex;flex-wrap:nowrap}
+.ch{
+  display:inline-block;opacity:0;transform:translateY(70px);
+  color:#D5DAE1;text-shadow:0 6px 0 rgba(0,0,0,.55);
+}
+.is-loaded .ch{
+  animation:letterUp .9s cubic-bezier(.2,.7,.2,1) calc(var(--i) * .09s + .2s) forwards,
+            glowPulse 3.5s ease-in-out calc(var(--i) * .09s + 1.4s) infinite;
+}
+@keyframes letterUp{to{opacity:1;transform:none}}
+@keyframes glowPulse{
+  0%,100%{text-shadow:0 6px 0 rgba(0,0,0,.55),0 0 0 rgba(30,144,214,0)}
+  50%{text-shadow:0 6px 0 rgba(0,0,0,.55),0 0 28px rgba(30,144,214,.6)}
+}
+.hero-title{
+  margin:0;font-family:Anton,Impact,sans-serif;font-weight:400;
+  font-size:clamp(70px,16vw,280px);line-height:.85;letter-spacing:4px;
+  display:flex;align-items:flex-start;justify-content:center;flex-wrap:wrap;
+  background:linear-gradient(180deg,var(--silver-1) 0%,var(--silver-2) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 6px 0 rgba(0,0,0,.6)) drop-shadow(0 0 1px rgba(255,255,255,.25));
+}
+.year{
+  font:300 clamp(26px,3vw,46px)/1 Oswald,sans-serif;color:var(--silver-2);
+  margin:.18em 0 0 .35em;letter-spacing:2px;
+  -webkit-text-fill-color:var(--silver-2);
+}
+.badge{
+  display:inline-flex;align-items:center;justify-content:center;gap:12px;margin-top:26px;
+  font:500 13px/1 Montserrat,sans-serif;letter-spacing:2px;color:#D7DEE8;
+}
+.badge i{width:14px;height:14px;background:#fff;border-radius:3px;display:inline-block}
+
+.game-menu{
+  position:absolute;left:50%;bottom:11vh;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;z-index:3;
+}
+.mi{
+  position:relative;border:0;background:none;cursor:pointer;padding:6px 16px;
+  font:600 clamp(16px,1.7vw,22px)/1.2 Oswald,sans-serif;letter-spacing:5px;
+  color:#AEB6C2;transition:color .3s,text-shadow .3s;
+}
+.mi::before{
+  content:"\25B6";position:absolute;left:-2px;top:50%;
+  transform:translate(-100%,-50%);font-size:.6em;color:var(--pill-on);
+  opacity:0;transition:opacity .3s,transform .3s;
+}
+.mi:hover,.mi:focus-visible{
+  color:#fff;text-shadow:0 0 14px rgba(30,144,214,.9);
+}
+.mi:hover::before,.mi:focus-visible::before{opacity:1;transform:translate(-120%,-50%)}
+
+/* ---------- 2. PROFIL ---------- */
+.profil-grid{
+  width:100%;max-width:1280px;margin:0 auto;
+  display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.25fr);
+  gap:6vw;align-items:center;position:relative;z-index:1;
+}
+.halo{margin:0;font:500 13px/1 Montserrat,sans-serif;letter-spacing:3px;color:var(--text-2)}
+.nama{
+  margin:12px 0 0;font:700 clamp(30px,3.6vw,54px)/1.05 Oswald,sans-serif;
+  letter-spacing:1px;background:linear-gradient(180deg,var(--silver-1),var(--silver-2));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.profil-photo{
+  position:relative;width:min(100%,460px);margin-top:28px;
+}
+.profil-photo .glow-soft{
+  position:absolute;left:50%;top:40%;width:110%;aspect-ratio:1;transform:translate(-50%,-50%);
+  border-radius:50%;background:radial-gradient(circle,rgba(30,144,214,.55),transparent 68%);
+  filter:blur(40px);z-index:0;
+}
+.profil-photo img{position:relative;z-index:1;width:100%;filter:drop-shadow(0 20px 30px rgba(0,0,0,.6))}
+.sparks{
+  position:absolute;inset:-15% -10%;width:120%;height:130%;
+  pointer-events:none;z-index:2;mix-blend-mode:screen;
+}
+
+.sub{
+  margin:0 0 14px;font:600 clamp(15px,1.5vw,19px)/1.2 Oswald,sans-serif;
+  letter-spacing:3px;color:#C9CED6;
+}
+.lead{margin:0;font-size:15px;line-height:1.85;color:var(--text)}
+.profil-right{display:flex;flex-direction:column;gap:34px}
+.apps{display:flex;flex-wrap:wrap;gap:16px}
+.app{display:flex;flex-direction:column;align-items:center;gap:8px;width:84px}
+.app-ic{
+  width:64px;height:64px;border-radius:16px;display:grid;place-items:center;
+  border:1px solid var(--line);
+  background:linear-gradient(145deg,rgba(30,144,214,.22),rgba(255,255,255,.02));
+  font:600 17px/1 Oswald,sans-serif;color:#fff;letter-spacing:1px;
+  transition:transform .3s,box-shadow .3s;
+}
+.app-logo{width:36px;height:36px;display:block}
+.app:hover .app-ic{transform:translateY(-4px);box-shadow:0 0 22px rgba(30,144,214,.55)}
+.app small{font-size:11px;letter-spacing:1px;color:var(--text-2);text-align:center}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{
+  border:1px solid var(--line);border-radius:999px;padding:8px 16px;
+  font-size:13px;color:var(--text);background:rgba(255,255,255,.02);
+  transition:transform .3s,box-shadow .3s;
+}
+.chip:hover{transform:translateY(-2px);box-shadow:0 0 18px rgba(30,144,214,.4)}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{
+  border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;
+  background:rgba(255,255,255,.025);backdrop-filter:blur(6px);
+  transition:transform .35s,box-shadow .35s;
+}
+.card:hover{transform:translateY(-3px);box-shadow:0 0 26px rgba(30,144,214,.28)}
+.card p{margin:0 0 6px}
+.card ul{margin:6px 0 0;padding-left:18px}
+.card li{margin:2px 0}
+.muted{color:var(--text-2)}
+.card-title{font:600 13px/1.4 Montserrat,sans-serif;letter-spacing:1px;color:var(--silver-1)}
+
+.bar-row{margin-bottom:16px}
+.bar-row:last-child{margin-bottom:0}
+.bar-head{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;color:var(--text)}
+.bar{height:6px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+.bar i{
+  display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--accent),var(--pill-on));
+  transition:width 1.4s cubic-bezier(.2,.8,.2,1);
+}
+.bar i.ph-bar{background:repeating-linear-gradient(45deg,rgba(191,221,245,.5) 0 6px,transparent 6px 12px)}
+.in .bar i{width:var(--w)}
+
+/* ---------- 3. PROJECT ---------- */
+.judul-tengah{
+  margin:0 0 36px;text-align:center;
+  font:400 clamp(44px,7vw,96px)/.95 Anton,Impact,sans-serif;letter-spacing:2px;
+  background:linear-gradient(180deg,var(--silver-1),var(--silver-2));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 5px 0 rgba(0,0,0,.55));
+}
+.bento{
+  width:100%;max-width:1200px;margin:0 auto;position:relative;z-index:1;
+  display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(170px,22vh);gap:16px;
+}
+.tile{
+  position:relative;padding:0;border-radius:var(--radius);overflow:hidden;cursor:pointer;
+  border:1px solid var(--line);background:linear-gradient(145deg,#0b2740,#05070B);
+  transition:transform .4s ease,box-shadow .4s ease;
+  opacity:0;transform:translateY(24px);
+}
+.tile.in{opacity:1;transform:none;transition-delay:var(--d,0ms)}
+.tile:hover,.tile:focus-visible{transform:translateY(-4px);box-shadow:0 0 30px rgba(30,144,214,.35)}
+.tile.big{grid-column:span 2;grid-row:span 2}
+.tile.wide{grid-column:span 2}
+.tile-ph{
+  position:absolute;inset:0;display:grid;place-items:center;padding:16px;text-align:center;
+  font-size:12px;letter-spacing:1px;color:var(--pill-on);
+}
+.tile img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;transition:transform 1.2s ease}
+.tile:hover img{transform:scale(1.06)}
+.ov{
+  position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;
+  padding:20px;text-align:left;
+  background:linear-gradient(to top,rgba(5,7,11,.96),rgba(5,7,11,.35) 60%,transparent);
+  opacity:0;transition:opacity .4s ease;
+}
+.tile:hover .ov,.tile:focus-visible .ov{opacity:1}
+.t-jenis{font-size:11px;letter-spacing:1px;color:var(--pill-on);text-transform:uppercase}
+.ov strong{font:600 22px/1.2 Oswald,sans-serif;letter-spacing:1px;color:#fff}
+.ov small{color:var(--text-2);font-size:12px}
+.btn-mini{
+  align-self:flex-start;margin-top:8px;padding:8px 14px;border-radius:999px;
+  border:1px solid rgba(191,221,245,.6);color:#fff;font-size:12px;letter-spacing:1px;
+}
+
+/* Modal detail project */
+.modal{
+  position:fixed;inset:0;z-index:100;display:none;place-items:center;padding:20px;
+  background:rgba(3,5,8,.82);backdrop-filter:blur(6px);
+}
+.modal.open{display:grid;animation:fade .35s ease-out both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.modal-box{
+  position:relative;width:min(920px,100%);max-height:90vh;overflow:auto;
+  display:grid;grid-template-columns:1.2fr 1fr;
+  background:#070D16;border:1px solid var(--line);border-radius:16px;
+}
+.modal-img{min-height:300px;background:linear-gradient(145deg,#0b2740,#05070B);display:grid;place-items:center;position:relative}
+.modal-img img{width:100%;height:100%;object-fit:cover}
+.modal-img .ph-big{padding:20px;text-align:center;color:var(--pill-on);font-size:13px}
+.modal-txt{padding:28px 26px}
+.m-jenis{margin:0 0 6px;font-size:11px;letter-spacing:1px;color:var(--pill-on);text-transform:uppercase}
+.modal-txt h3{margin:0 0 6px;font:600 30px/1.1 Oswald,sans-serif;letter-spacing:1px;color:var(--silver-1)}
+.m-tahun{margin:0 0 16px;font-size:12px;color:var(--text-2)}
+.modal-close{
+  position:absolute;top:10px;right:12px;z-index:3;width:38px;height:38px;border-radius:50%;
+  border:1px solid var(--line);background:rgba(5,7,11,.7);color:#fff;font-size:20px;cursor:pointer;
+}
+.modal-close:hover{box-shadow:0 0 16px rgba(30,144,214,.6)}
+
+/* ---------- 4. KONTAK ---------- */
+.kontak-grid{
+  position:relative;z-index:1;width:100%;max-width:1280px;margin:0 auto;
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:4vw;align-items:center;
+}
+.kontak-left{position:relative}
+.photo-wrap{position:relative;width:min(300px,70vw);margin-top:20px}
+.circle{
+  width:100%;aspect-ratio:1;border-radius:50%;overflow:hidden;
+  border:1px solid rgba(255,255,255,.35);
+  box-shadow:0 0 40px rgba(30,144,214,.25);
+}
+.circle img{width:100%;height:100%;object-fit:cover;object-position:50% 25%}
+.socials{position:absolute;inset:0;pointer-events:none}
+.soc{
+  position:absolute;pointer-events:auto;display:flex;align-items:center;gap:10px;
+  transform:translate(-50%,-50%);text-decoration:none;color:var(--text);white-space:nowrap;
+}
+.soc-ic{
+  width:50px;height:50px;border-radius:50%;background:#fff;color:#0B2A44;
+  display:grid;place-items:center;font-size:22px;line-height:1;
+  box-shadow:0 0 0 rgba(30,144,214,0);transition:transform .3s,box-shadow .3s;
+}
+.soc:hover .soc-ic,.soc:focus-visible .soc-ic{transform:translateY(-3px) scale(1.06);box-shadow:0 0 22px rgba(30,144,214,.8)}
+.soc-h{font-size:13px;color:var(--text)}
+.nama-bawah{margin:18px 0 0;font:600 18px/1.3 Montserrat,sans-serif;color:var(--silver-1)}
+
+.kontak-right{position:relative;min-height:60vh;display:flex;flex-direction:column;justify-content:center}
+.besar{
+  margin:0;font:700 clamp(54px,8.5vw,140px)/.84 Oswald,sans-serif;text-transform:uppercase;
+  color:rgba(139,144,153,.42);letter-spacing:1px;
+}
+.tahun-besar{font-weight:300;color:rgba(139,144,153,.3);margin-top:-.05em}
+.cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px;position:relative;z-index:2}
+.btn{
+  display:inline-block;padding:13px 22px;border-radius:12px;text-decoration:none;
+  border:1px solid rgba(191,221,245,.5);background:rgba(255,255,255,.04);color:#fff;
+  font:600 13px/1 Montserrat,sans-serif;letter-spacing:1px;
+  transition:transform .25s,box-shadow .25s,background .25s;
+}
+.btn:hover{transform:translateY(-3px);box-shadow:0 0 24px rgba(30,144,214,.6)}
+.btn.solid{background:var(--pill-on);color:var(--pill-on-text);border-color:transparent}
+.decor{
+  position:absolute;right:0;bottom:4vh;width:min(400px,46vw);height:auto;opacity:.9;pointer-events:none;z-index:0;
+}
+.foot{
+  position:relative;z-index:1;margin-top:auto;padding-top:60px;text-align:center;
+  font-size:12px;letter-spacing:1px;color:var(--text-2);
+}
+
+/* ---------- Animasi masuk ---------- */
+.anim,.anim-l{opacity:0}
+.is-loaded .anim{animation:rise .9s cubic-bezier(.2,.7,.2,1) var(--d,0s) both}
+.is-loaded .anim-l{animation:slideR 1s cubic-bezier(.2,.7,.2,1) .15s both}
+@keyframes rise{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes slideR{from{opacity:0;transform:translateX(-90px)}to{opacity:1;transform:none}}
+
+.rv{opacity:0;transform:translateY(30px);transition:opacity .75s ease-out,transform .75s ease-out;transition-delay:var(--d,0ms)}
+.rv.in{opacity:1;transform:none}
+
+/* Hover umum */
+.hover-lift{transition:transform .3s,box-shadow .3s}
+
+/* ---------- Responsif: tablet ---------- */
+@media (max-width:1000px){
+  .arc-shape{height:62vh;width:calc(62vh * 1.25);border-radius:0 31vh 31vh 0}
+  .hero-title{font-size:clamp(60px,15vw,200px)}
+  .profil-grid{grid-template-columns:1fr;gap:40px}
+  .profil-photo{margin-inline:auto}
+  .kontak-grid{grid-template-columns:1fr;gap:50px}
+  .kontak-right{min-height:auto}
+  .decor{width:min(340px,50vw);opacity:.6}
+  .bento{grid-template-columns:repeat(2,1fr);grid-auto-rows:minmax(170px,28vh)}
+  .tile.big{grid-column:span 2;grid-row:span 1}
+}
+
+/* ---------- Responsif: HP ---------- */
+@media (max-width:700px){
+  .screen{padding:96px 16px 110px}
+  .topbar{height:auto;grid-template-columns:1fr;padding:16px 16px 0;justify-items:start}
+  .logo{font-size:20px}
+  .pill-nav{
+    position:fixed;bottom:14px;left:50%;transform:translateX(-50%);top:auto;
+    width:calc(100% - 32px);max-width:420px;justify-content:space-between;
+    background:rgba(5,7,11,.72);
+  }
+  .nav-btn{flex:1;text-align:center;padding:11px 6px;font-size:11px;letter-spacing:1px}
+
+  .hero{min-height:100vh}
+  .arc-shape{left:50%;top:9vh;transform:translateX(-50%);width:78vw;height:44vh;border-radius:50%}
+  .arc-shape::before{content:none}
+  .hero-photo{height:124%;bottom:-4%}
+  .hero-text{left:16px;right:16px;top:auto;bottom:auto;transform:none;top:58vh;text-align:center}
+  .hero-title{justify-content:center;font-size:clamp(54px,17vw,92px)}
+  .badge{justify-content:center}
+  .game-menu{bottom:84px;gap:2px}
+  .mi{letter-spacing:4px}
+
+  .profil-grid{gap:30px}
+  .profil-photo{width:min(78vw,340px)}
+  .two{grid-template-columns:1fr}
+  .app{width:72px}
+  .app-ic{width:56px;height:56px;font-size:15px}
+
+  .bento{grid-template-columns:repeat(2,1fr);grid-auto-rows:150px;gap:10px}
+  .tile.big{grid-column:span 2;grid-row:span 2}
+  .tile.wide{grid-column:span 2}
+  .tile.small{grid-column:span 1}
+  .ov{opacity:1;padding:14px}
+  .ov strong{font-size:17px}
+  .btn-mini{padding:6px 10px;font-size:11px}
+  .modal-box{grid-template-columns:1fr}
+  .modal-img{min-height:220px}
+
+  .photo-wrap{width:min(240px,64vw)}
+  .socials{position:static;display:flex;flex-direction:column;gap:10px;margin-top:22px;pointer-events:auto}
+  .soc{position:static;transform:none}
+  .soc-ic{width:44px;height:44px}
+  .besar{font-size:clamp(46px,16vw,86px)}
+  .decor{display:none}
+  .cta .btn{flex:1;text-align:center}
+  .kontak-right{margin-bottom:40px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .anim,.anim-l,.rv,.tile{opacity:1!important;transform:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- Lapisan latar -->
+<div class="bg-fixed" aria-hidden="true"></div>
+<svg class="circuit" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <g fill="none" stroke="#1E90D6" stroke-width="1.2">
+    <path d="M0 140H380L430 190H720"/>
+    <path d="M1600 220H1240L1190 270H900V420"/>
+    <path d="M120 900V640L190 570H520"/>
+    <path d="M1600 760H1310L1250 700V560"/>
+    <path d="M780 0V120L820 160H1100"/>
+    <path d="M0 520H260L300 480H470"/>
+  </g>
+  <g fill="#1E90D6">
+    <circle cx="720" cy="190" r="3"/><circle cx="900" cy="420" r="3"/>
+    <circle cx="520" cy="570" r="3"/><circle cx="1250" cy="700" r="3"/>
+    <circle cx="1100" cy="160" r="3"/><circle cx="470" cy="480" r="3"/>
+  </g>
+</svg>
+<div class="grain" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+<div class="cur-ring" id="cur-ring" aria-hidden="true"></div>
+<div class="cur-dot" id="cur-dot" aria-hidden="true"></div>
+
+<!-- Navigasi global -->
+<header class="topbar">
+  <a class="logo" href="#mulai" aria-label="Kembali ke sampul"><span>FA</span></a>
+  <nav class="pill-nav" aria-label="Navigasi utama">
+    <span class="nav-ind" id="nav-ind"></span>
+    <button class="nav-btn" data-go="profil">PROFIL</button>
+    <button class="nav-btn" data-go="project">PROJECT</button>
+    <button class="nav-btn" data-go="kontak">KONTAK</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ===== 1. SAMPUL ===== -->
+  <section id="mulai" class="screen hero">
+    <div class="glow g-tl"></div>
+    <div class="glow g-br"></div>
+
+    <div class="hero-core" aria-hidden="true">
+      <!-- Visual tengah sampul: cincin berputar dan kabel jaringan -->
+      <svg class="core-svg" viewBox="0 0 500 400">
+        <g class="spin-group" fill="none" stroke="rgba(191,221,245,.28)" stroke-width="1.2">
+          <circle cx="250" cy="200" r="70"/>
+          <circle cx="250" cy="200" r="120"/>
+          <circle cx="250" cy="200" r="175" stroke-dasharray="4 8"/>
+        </g>
+        <path d="M40 330C120 260 160 370 240 300S360 250 430 320" fill="none" stroke="#05070B" stroke-width="10" stroke-linecap="round" opacity=".5"/>
+        <path d="M40 330C120 260 160 370 240 300S360 250 430 320" fill="none" stroke="#BFDDF5" stroke-width="1.5" opacity=".75"/>
+        <path d="M120 90L250 200L400 110" fill="none" stroke="rgba(191,221,245,.4)" stroke-width="1"/>
+        <g fill="#BFDDF5">
+          <circle cx="250" cy="200" r="4"/><circle cx="120" cy="90" r="3.5"/><circle cx="400" cy="110" r="3.5"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="hero-text">
+      <h1 class="hero-title">
+        <span class="judul-huruf" data-bind="judulHero">PORTFOLIO</span>
+      </h1>
+      <div class="badge anim" style="--d:.45s"><i aria-hidden="true"></i><span data-bind="label">DESAINER &amp; TEKNISI JARINGAN</span></div>
+    </div>
+
+    <div class="game-menu">
+      <button class="mi anim" style="--d:.6s" data-go="profil">MULAI</button>
+      <button class="mi anim" style="--d:.75s" data-go="tentang">TENTANG</button>
+      <button class="mi anim" style="--d:.9s" data-go="mulai" data-exit>KELUAR</button>
+    </div>
+  </section>
+
+  <!-- ===== 2. PROFIL ===== -->
+  <section id="profil" class="screen">
+    <div class="glow g-tl"></div>
+    <div class="glow g-br"></div>
+
+    <div class="profil-grid">
+      <div class="profil-left rv">
+        <p class="halo">HALO, SAYA</p>
+        <h2 class="nama" data-bind="nama">FAHRI ADITYA PUTRA RAHMAD</h2>
+        <div class="profil-photo">
+          <div class="glow-soft" aria-hidden="true"></div>
+          <canvas class="sparks" id="sparks" aria-hidden="true"></canvas>
+          <img src="assets/foto-cutout.png" alt="Foto setengah badan Fahri">
+        </div>
+      </div>
+
+      <div class="profil-right">
+        <div class="rv">
+          <h3 class="sub" id="tentang">TENTANG SAYA</h3>
+          <p class="lead" data-bind="tentang"></p>
+        </div>
+
+        <div class="rv">
+          <h3 class="sub">KEAHLIAN SOFTWARE</h3>
+          <div class="apps" id="software"></div>
+        </div>
+
+        <div class="rv">
+          <h3 class="sub">KEAHLIAN JARINGAN</h3>
+          <div class="chips" id="jaringan"></div>
+        </div>
+
+        <div class="two">
+          <div class="rv">
+            <h3 class="sub">PENDIDIKAN</h3>
+            <div class="card" id="pendidikan"></div>
+          </div>
+          <div class="rv" style="--d:120ms">
+            <h3 class="sub">PENGALAMAN</h3>
+            <div class="card" id="pengalaman"></div>
+          </div>
+        </div>
+
+        <div class="rv">
+          <h3 class="sub">SOFT SKILL</h3>
+          <div class="chips" id="softskill"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 3. PROJECT ===== -->
+  <section id="project" class="screen">
+    <div class="glow g-tl"></div>
+    <div class="glow g-br"></div>
+
+    <h2 class="judul-tengah rv" data-bind="judulProject">REKAP PROJECT 2026</h2>
+    <div class="bento" id="bento"></div>
+
+    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="m-judul" aria-hidden="true">
+      <div class="modal-box">
+        <button class="modal-close" id="modal-close" aria-label="Tutup detail">&times;</button>
+        <div class="modal-img" id="m-img"></div>
+        <div class="modal-txt">
+          <p class="m-jenis" id="m-jenis"></p>
+          <h3 id="m-judul"></h3>
+          <p class="m-tahun" id="m-tahun"></p>
+          <p class="lead" id="m-desc"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 4. KONTAK ===== -->
+  <section id="kontak" class="screen">
+    <div class="glow g-tl"></div>
+    <div class="glow g-br"></div>
+
+    <div class="kontak-grid">
+      <div class="kontak-left">
+        <h2 class="sub rv">HUBUNGI SAYA</h2>
+        <div class="photo-wrap rv">
+          <div class="circle"><img src="assets/foto-hero.png" alt="Foto Fahri"></div>
+          <div class="socials" id="socials"></div>
+        </div>
+        <p class="nama-bawah rv" data-bind="namaSingkat"></p>
+      </div>
+
+      <div class="kontak-right">
+        <p class="besar rv">TERIMA KASIH</p>
+        <p class="besar tahun-besar rv" data-bind="tahun">2026</p>
+        <div class="cta rv" id="cta"></div>
+
+        <!-- Dekorasi: kabel LAN, konektor RJ45, kuas -->
+        <svg class="decor" viewBox="0 0 400 300" aria-hidden="true">
+          <path d="M30 230C70 190 110 270 150 220S230 170 220 245S110 290 50 262" fill="none" stroke="#1E90D6" stroke-width="7" stroke-linecap="round" opacity=".75"/>
+          <path d="M30 230C70 190 110 270 150 220S230 170 220 245S110 290 50 262" fill="none" stroke="#BFDDF5" stroke-width="1.5" opacity=".5"/>
+          <g transform="translate(176 186) rotate(-18)">
+            <rect width="78" height="60" rx="9" fill="#0b1b2d" stroke="#BFDDF5" stroke-width="2"/>
+            <rect x="16" y="32" width="46" height="20" rx="2" fill="#05070B"/>
+            <path d="M22 32v-8M30 32v-8M38 32v-8M46 32v-8M54 32v-8" stroke="#C8102E" stroke-width="2"/>
+          </g>
+          <path d="M262 262L356 128" stroke="#8B9099" stroke-width="10" stroke-linecap="round"/>
+          <path d="M350 118L374 90" stroke="#1E90D6" stroke-width="13" stroke-linecap="round"/>
+          <path d="M254 268c10 2 14-6 8-10" fill="none" stroke="#C8102E" stroke-width="5" stroke-linecap="round" opacity=".8"/>
+          <!-- Pita film di bawah kanan -->
+          <g transform="translate(-6 196) rotate(-12)" opacity=".7">
+            <rect width="120" height="54" rx="6" fill="#0b1b2d" stroke="#8B9099" stroke-width="2"/>
+            <g fill="#05070B">
+              <rect x="6" y="5" width="8" height="5"/><rect x="22" y="5" width="8" height="5"/><rect x="38" y="5" width="8" height="5"/><rect x="54" y="5" width="8" height="5"/><rect x="70" y="5" width="8" height="5"/><rect x="86" y="5" width="8" height="5"/><rect x="102" y="5" width="8" height="5"/>
+              <rect x="6" y="44" width="8" height="5"/><rect x="22" y="44" width="8" height="5"/><rect x="38" y="44" width="8" height="5"/><rect x="54" y="44" width="8" height="5"/><rect x="70" y="44" width="8" height="5"/><rect x="86" y="44" width="8" height="5"/><rect x="102" y="44" width="8" height="5"/>
+            </g>
+            <rect x="14" y="16" width="92" height="22" rx="2" fill="#06192E" stroke="#1E90D6" stroke-width="1"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <footer class="foot">&copy; 2026 <span data-bind="namaSingkat"></span></footer>
+  </section>
+
+</main>
+
+<script>
+/* =====================================================
+   DATA — SEMUA TEKS DI SINI.
+   Teks dalam [kurung siku] tampil sebagai placeholder.
+   ===================================================== */
+const DATA = {
+  nama: "FAHRI ADITYA PUTRA RAHMAD",
+  namaSingkat: "Fahri Aditya Putra Rahmad",
+  judulHero: "PORTOFOLIO",
+  judulProject: "REKAP PROJECT 2026",
+  tahun: "2026",
+  label: "DESAINER & TEKNISI JARINGAN",
+
+  tentang: "Saya seorang desainer yang senang mengubah ide menjadi tampilan yang rapi, mudah dipahami, dan enak dilihat. Saya pernah merancang aplikasi kasir berbasis web untuk tugas akhir dan menyusun laporan keuangan UMKM. Selain desain, saya punya pengalaman 6 bulan PKL di bagian jaringan RS Sakinah, mulai dari memperbaiki gangguan jaringan sampai menangani masalah kelistrikan. Saat ini saya sedang mencari kesempatan kerja dan terbuka untuk berkolaborasi.",
+
+  // Ganti singkatan ikon dengan logo asli jika ingin
+  // path: bentuk logo resmi (Simple Icons, viewBox 0 0 24 24); color: warna merek.
+  software: [
+    { nama: "Photoshop", singkat: "Ps", color: "#31A8FF", path: "M9.85 8.42c-.37-.15-.77-.21-1.18-.2-.26 0-.49 0-.68.01-.2-.01-.34 0-.41.01v3.36c.14.01.27.02.39.02h.53c.39 0 .78-.06 1.15-.18.32-.09.6-.28.82-.53.21-.25.31-.59.31-1.03.01-.31-.07-.62-.23-.89-.17-.26-.41-.46-.7-.57zM19.75.3H4.25C1.9.3 0 2.2 0 4.55v14.899c0 2.35 1.9 4.25 4.25 4.25h15.5c2.35 0 4.25-1.9 4.25-4.25V4.55C24 2.2 22.1.3 19.75.3zm-7.391 11.65c-.399.56-.959.98-1.609 1.22-.68.25-1.43.34-2.25.34-.24 0-.4 0-.5-.01s-.24-.01-.43-.01v3.209c.01.07-.04.131-.11.141H5.52c-.08 0-.12-.041-.12-.131V6.42c0-.07.03-.11.1-.11.17 0 .33 0 .56-.01.24-.01.49-.01.76-.02s.56-.01.87-.02c.31-.01.61-.01.91-.01.82 0 1.5.1 2.06.31.5.17.96.45 1.34.82.32.32.57.71.73 1.14.149.42.229.85.229 1.3.001.86-.199 1.57-.6 2.13zm7.091 3.89c-.28.4-.671.709-1.12.891-.49.209-1.09.318-1.811.318-.459 0-.91-.039-1.359-.129-.35-.061-.7-.17-1.02-.32-.07-.039-.121-.109-.111-.189v-1.74c0-.029.011-.07.041-.09.029-.02.06-.01.09.01.39.23.8.391 1.24.49.379.1.779.15 1.18.15.38 0 .65-.051.83-.141.16-.07.27-.24.27-.42 0-.141-.08-.27-.24-.4-.16-.129-.489-.279-.979-.471-.51-.18-.979-.42-1.42-.719-.31-.221-.569-.51-.761-.85-.159-.32-.239-.67-.229-1.021 0-.43.12-.84.341-1.21.25-.4.619-.72 1.049-.92.469-.239 1.059-.349 1.769-.349.41 0 .83.03 1.24.09.3.04.59.12.86.23.039.01.08.05.1.09.01.04.02.08.02.12v1.63c0 .04-.02.08-.05.1-.09.02-.14.02-.18 0-.3-.16-.62-.27-.96-.34-.37-.08-.74-.13-1.12-.13-.2-.01-.41.02-.601.07-.129.03-.24.1-.31.2-.05.08-.08.18-.08.27s.04.18.101.26c.09.11.209.2.34.27.229.12.47.23.709.33.541.18 1.061.43 1.541.73.33.209.6.49.789.83.16.318.24.67.23 1.029.011.471-.129.94-.389 1.331z" },
+    { nama: "Illustrator", singkat: "Ai", color: "#FF9A00", path: "M10.53 10.73c-.1-.31-.19-.61-.29-.92-.1-.31-.19-.6-.27-.89-.08-.28-.15-.54-.22-.78h-.02c-.09.43-.2.86-.34 1.29-.15.48-.3.98-.46 1.48-.14.51-.29.98-.44 1.4h2.54c-.06-.211-.14-.46-.23-.721-.09-.269-.18-.559-.27-.859zM19.75.3H4.25C1.9.3 0 2.2 0 4.55v14.9c0 2.35 1.9 4.25 4.25 4.25h15.5c2.35 0 4.25-1.9 4.25-4.25V4.55C24 2.2 22.1.3 19.75.3zM14.7 16.83h-2.091c-.069.01-.139-.04-.159-.11l-.82-2.38H7.91l-.76 2.35c-.02.09-.1.15-.19.141H5.08c-.11 0-.14-.061-.11-.18L8.19 7.38c.03-.1.06-.21.1-.33.04-.21.06-.43.06-.65-.01-.05.03-.1.08-.11h2.59c.08 0 .12.03.13.08l3.65 10.3c.03.109 0 .16-.1.16zm3.4-.15c0 .11-.039.16-.129.16H16.01c-.1 0-.15-.061-.15-.16v-7.7c0-.1.041-.14.131-.14h1.98c.09 0 .129.05.129.14v7.7zm-.209-9.03c-.231.24-.571.37-.911.35-.33.01-.65-.12-.891-.35-.23-.25-.35-.58-.34-.92-.01-.34.12-.66.359-.89.242-.23.562-.35.892-.35.391 0 .689.12.91.35.22.24.34.56.33.89.01.34-.11.67-.349.92z" },
+    { nama: "CorelDRAW", singkat: "CDR", color: "#00B140", path: "M10.651 0C10.265.019 9.4.272 8.584.657c-.816.39-3.696 2.161-3.752 6.536.072 4.145 3.847 11.191 6.397 13.455 0 0-4.141-6.952-4.439-13.013C6.488 1.575 10.651 0 10.651 0Zm2.679 0s4.159 1.575 3.861 7.635c-.299 6.061-4.439 13.013-4.439 13.013 2.547-2.264 6.324-9.31 6.396-13.455-.057-4.375-2.936-6.146-3.752-6.536C14.58.272 13.715.019 13.33 0Zm-1.38.019a1.088 1.088 0 0 0-.555.144C9.864.99 8.909 3.982 9.177 8.66c.185 3.242 1.009 7.291 2.422 11.988h.7c1.413-4.697 2.24-8.742 2.425-11.984.268-4.677-.688-7.674-2.219-8.501a1.088 1.088 0 0 0-.555-.144ZM7.017 1.066S2.543 2.909 3.431 8.225c.884 5.32 5.588 10.995 6.986 12.2.503.457-5.777-6.548-6.386-12.699-.291-2.323.39-4.9 2.986-6.66Zm9.966 0c2.595 1.76 3.276 4.337 2.985 6.66-.608 6.151-6.888 13.156-6.386 12.699 1.398-1.205 6.103-6.88 6.987-12.2.888-5.316-3.586-7.159-3.586-7.159Zm-6.815 20.78L10.647 24h2.599l.488-2.154h-3.566Z" },
+    { nama: "Canva", singkat: "Cv", color: "#00C4CC", path: "M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zM6.962 7.68c.754 0 1.337.549 1.405 1.2.069.583-.171 1.097-.822 1.406-.343.171-.48.172-.549.069-.034-.069 0-.137.069-.206.617-.514.617-.926.548-1.508-.034-.378-.308-.618-.583-.618-1.2 0-2.914 2.674-2.674 4.629.103.754.549 1.646 1.509 1.646.308 0 .65-.103.96-.24.5-.264.799-.47 1.097-.8-.073-.885.704-2.046 1.851-2.046.515 0 .926.205.96.583.068.514-.377.582-.514.582s-.378-.034-.378-.17c-.034-.138.309-.07.275-.378-.035-.206-.24-.274-.446-.274-.72 0-1.131.994-1.029 1.611.035.275.172.549.447.549.205 0 .514-.31.617-.755.068-.308.343-.514.583-.514.102 0 .17.034.205.171v.138c-.034.137-.137.548-.102.651 0 .069.034.171.17.171.092 0 .436-.18.777-.459.117-.59.253-1.298.253-1.357.034-.24.137-.48.617-.48.103 0 .171.034.205.171v.138l-.136.617c.445-.583 1.097-.994 1.508-.994.172 0 .309.102.309.274 0 .103 0 .274-.069.446-.137.377-.309.96-.412 1.474 0 .137.035.274.207.274.171 0 .685-.206 1.096-.754l.007-.004c-.002-.068-.007-.134-.007-.202 0-.411.035-.754.104-.994.068-.274.411-.514.617-.514.103 0 .205.069.205.171 0 .035 0 .103-.034.137-.137.446-.24.857-.24 1.269 0 .24.034.582.102.788 0 .034.035.069.07.069.068 0 .548-.445.89-1.028-.308-.206-.48-.549-.48-.96 0-.72.446-1.097.858-1.097.343 0 .617.24.617.72 0 .308-.103.65-.274.96h.102a.77.77 0 0 0 .584-.24.293.293 0 0 1 .134-.117c.335-.425.83-.74 1.41-.74.48 0 .924.205.959.582.068.515-.378.618-.515.618l-.002-.002c-.138 0-.377-.035-.377-.172 0-.137.309-.068.274-.376-.034-.206-.24-.275-.446-.275-.686 0-1.13.891-1.028 1.611.034.275.171.583.445.583.206 0 .515-.308.652-.754.068-.274.343-.514.583-.514.103 0 .17.034.205.171 0 .069 0 .206-.137.652-.17.308-.171.48-.137.617.034.274.171.48.309.583.034.034.068.102.068.102 0 .069-.034.138-.137.138-.034 0-.068 0-.103-.035-.514-.205-.72-.548-.789-.891-.205.24-.445.377-.72.377-.445 0-.89-.411-.96-.926a1.609 1.609 0 0 1 .075-.649c-.203.13-.422.203-.623.203h-.17c-.447.652-.927 1.098-1.27 1.303a.896.896 0 0 1-.377.104c-.068 0-.171-.035-.205-.104-.095-.152-.156-.392-.193-.667-.481.527-1.145.805-1.453.805-.343 0-.548-.206-.582-.55v-.376c.102-.754.377-1.2.377-1.337a.074.074 0 0 0-.069-.07c-.24 0-1.028.824-1.166 1.373l-.103.445c-.068.309-.377.515-.582.515-.103 0-.172-.035-.206-.172v-.137l.046-.233c-.435.31-.87.508-1.075.508-.308 0-.48-.172-.514-.412-.206.274-.445.412-.754.412-.352 0-.696-.24-.862-.593-.244.275-.523.553-.852.764-.48.309-1.028.549-1.68.549-.582 0-1.097-.309-1.371-.583-.412-.377-.651-.96-.686-1.509-.205-1.68.823-3.84 2.4-4.8.378-.205.755-.343 1.132-.343zm9.77 3.291c-.104 0-.172.172-.172.343 0 .274.137.583.309.755a1.74 1.74 0 0 0 .102-.583c0-.343-.137-.515-.24-.515z" },
+    { nama: "Figma", singkat: "Fg", color: "#F24E1E", path: "M15.852 8.981h-4.588V0h4.588c2.476 0 4.49 2.014 4.49 4.49s-2.014 4.491-4.49 4.491zM12.735 7.51h3.117c1.665 0 3.019-1.355 3.019-3.019s-1.355-3.019-3.019-3.019h-3.117V7.51zm0 1.471H8.148c-2.476 0-4.49-2.014-4.49-4.49S5.672 0 8.148 0h4.588v8.981zm-4.587-7.51c-1.665 0-3.019 1.355-3.019 3.019s1.354 3.02 3.019 3.02h3.117V1.471H8.148zm4.587 15.019H8.148c-2.476 0-4.49-2.014-4.49-4.49s2.014-4.49 4.49-4.49h4.588v8.98zM8.148 8.981c-1.665 0-3.019 1.355-3.019 3.019s1.355 3.019 3.019 3.019h3.117V8.981H8.148zM8.172 24c-2.489 0-4.515-2.014-4.515-4.49s2.014-4.49 4.49-4.49h4.588v4.441c0 2.503-2.047 4.539-4.563 4.539zm-.024-7.51a3.023 3.023 0 0 0-3.019 3.019c0 1.665 1.365 3.019 3.044 3.019 1.705 0 3.093-1.376 3.093-3.068v-2.97H8.148zm7.704 0h-.098c-2.476 0-4.49-2.014-4.49-4.49s2.014-4.49 4.49-4.49h.098c2.476 0 4.49 2.014 4.49 4.49s-2.014 4.49-4.49 4.49zm-.097-7.509c-1.665 0-3.019 1.355-3.019 3.019s1.355 3.019 3.019 3.019h.098c1.665 0 3.019-1.355 3.019-3.019s-1.355-3.019-3.019-3.019h-.098z" },
+  ],
+
+  jaringan: ["Perbaikan jaringan", "Instalasi kabel LAN", "Router & switch", "Troubleshooting", "Kelistrikan dasar"],
+
+  pendidikan: {
+    masuk: "2024",
+    lulus: "2027",
+    sekolah: "SMK Negeri 2 Kota Mojokerto",
+    jurusan: "Rekayasa Perangkat Lunak (RPL)",
+  },
+
+  pengalaman: {
+    judul: "PKL Bagian Jaringan, RS Sakinah",
+    waktu: "6 April 2026 - 6 Oktober 2026 (6 bulan)",
+    poin: ["Perbaikan jaringan", "Kelistrikan", "Instalasi kabel"],
+  },
+
+  // Soft skill: ganti isinya sesuai diri Anda
+  softskill: ["Kerja tim", "Komunikasi", "Problem solving", "Ketelitian", "Manajemen waktu"],
+
+  // size: big | wide | small. img: kosongkan jika belum ada gambar
+  projects: [
+    { judul: "KasirKu", jenis: "Aplikasi Web · Tugas Akhir", tahun: "[Tahun]", size: "big", img: "assets/kasirku.png",
+      deskripsi: "Aplikasi kasir berbasis web untuk mencatat penjualan, memilih produk, menghitung total otomatis, dan menyimpan riwayat transaksi." },
+    { judul: "Catatan Untung", jenis: "Laporan Keuangan UMKM", tahun: "[Tahun]", size: "wide", img: "assets/catatan-untung.png",
+      deskripsi: "Laporan keuangan UMKM berisi ringkasan pemasukan, pengeluaran, laba bersih, grafik bulanan, dan transaksi terbaru." },
+    { judul: "Contoh Poster", jenis: "Poster · Contoh desain", tahun: "2026", size: "small", img: "assets/contoh-poster.png",
+      deskripsi: "Contoh poster bertema desain dan teknologi. [Ganti dengan karya asli beserta deskripsinya.]" },
+    { judul: "Contoh Logo", jenis: "Logo · Contoh desain", tahun: "2026", size: "small", img: "assets/contoh-logo.png",
+      deskripsi: "Contoh logo dengan elemen jaringan. [Ganti dengan karya asli beserta deskripsinya.]" },
+    { judul: "Dokumentasi PKL", jenis: "[Foto dokumentasi]", tahun: "[Tahun]", size: "wide", img: "",
+      deskripsi: "[Ceritakan singkat dokumentasi PKL di RS Sakinah]" },
+  ],
+
+  // Ganti href "#" dengan link asli (mis. "assets/CV-Fahri.pdf")
+  tombol: { cv: "#", sertifikat: "#" },
+
+  kontak: [
+    // ikon: kelas Font Awesome (lihat https://fontawesome.com/icons)
+    { nama: "Instagram", ikon: "fa-brands fa-instagram", handle: "@adtyaaaaptra_", link: "https://instagram.com/adtyaaaaptra_" },
+    { nama: "WhatsApp",  ikon: "fa-brands fa-whatsapp",  handle: "085743462297",  link: "https://wa.me/6285743462297" },
+    { nama: "Email",     ikon: "fa-solid fa-envelope",   handle: "farillolo86@gmail.com", link: "mailto:farillolo86@gmail.com" },
+  ],
+};
+
+/* ---------- Utilitas ---------- */
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+// Escape teks lalu bungkus [kurung] sebagai placeholder
+const txt = s => esc(s).replace(/\[([^\]]*)\]/g, '<span class="ph">[$1]</span>');
+
+/* ---------- Render isi dari DATA ---------- */
+function render() {
+  $$("[data-bind]").forEach(el => {
+    const v = DATA[el.dataset.bind];
+    if (v != null) el.innerHTML = txt(v);
+  });
+
+  $("#software").innerHTML = DATA.software.map((s, i) => `
+    <div class="app rv" style="--d:${i * 80}ms">
+      <span class="app-ic" aria-hidden="true" style="border-color:${s.color}66">
+        <svg class="app-logo" viewBox="0 0 24 24"><path fill="${s.color}" d="${s.path}"/></svg>
+      </span>
+      <small>${txt(s.nama)}</small>
+    </div>`).join("");
+
+  $("#jaringan").innerHTML = DATA.jaringan
+    .map((j, i) => `<span class="chip rv" style="--d:${i * 70}ms">${txt(j)}</span>`).join("");
+
+  const p = DATA.pendidikan;
+  $("#pendidikan").innerHTML = `
+    <p class="card-title">${txt(p.masuk)} - ${txt(p.lulus)}</p>
+    <p>${txt(p.sekolah)}</p>
+    <p class="muted">${txt(p.jurusan)}</p>`;
+
+  const e = DATA.pengalaman;
+  $("#pengalaman").innerHTML = `
+    <p class="card-title">${txt(e.judul)}</p>
+    <p class="muted">${txt(e.waktu)}</p>
+    <ul>${e.poin.map(x => `<li>${txt(x)}</li>`).join("")}</ul>`;
+
+  $("#softskill").innerHTML = DATA.softskill
+    .map((s, i) => `<span class="chip rv" style="--d:${i * 70}ms">${txt(s)}</span>`).join("");
+
+  $("#bento").innerHTML = DATA.projects.map((p, i) => `
+    <button class="tile ${p.size}" data-i="${i}" style="--d:${i * 90}ms" aria-label="Lihat detail ${esc(p.judul)}">
+      <span class="tile-ph">${txt("[Gambar: " + p.judul + "]")}</span>
+      ${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.judul)}" loading="lazy" onerror="this.remove()">` : ""}
+      <span class="ov">
+        <span class="t-jenis">${txt(p.jenis)}</span>
+        <strong>${txt(p.judul)}</strong>
+        <small>${txt(p.tahun)}</small>
+        <span class="btn-mini">Lihat Detail</span>
+      </span>
+    </button>`).join("");
+
+  // Posisi ikon sosial melengkung di sisi kanan foto (persen dari kotak foto)
+  // Ikon tersebar melengkung dari -35° sampai 35° sesuai jumlah kontak
+  const n = DATA.kontak.length, R = 52;
+  $("#socials").innerHTML = DATA.kontak.map((k, i) => {
+    const deg = n === 1 ? 0 : -35 + i * (70 / (n - 1));
+    const a = deg * Math.PI / 180;
+    const x = 50 + R * Math.cos(a), y = 50 + R * Math.sin(a);
+    return `<a class="soc" href="${esc(k.link)}" style="left:${x.toFixed(1)}%;top:${y.toFixed(1)}%" aria-label="${esc(k.nama)}">
+      <span class="soc-ic" aria-hidden="true"><i class="${esc(k.ikon)}"></i></span>
+      <span class="soc-h">${txt(k.handle)}</span>
+    </a>`;
+  }).join("");
+
+  $("#cta").innerHTML = `
+    <a class="btn solid" href="${esc(DATA.tombol.cv)}">Unduh CV</a>
+    <a class="btn" href="${esc(DATA.tombol.sertifikat)}">Lihat Sertifikat PKL</a>`;
+}
+
+/* ---------- Navigasi & indikator pil ---------- */
+const ind = $("#nav-ind");
+function moveIndicator(btn) {
+  if (!btn) { ind.style.opacity = 0; return; }
+  ind.style.opacity = 1;
+  ind.style.left = btn.offsetLeft + "px";
+  ind.style.width = btn.offsetWidth + "px";
+}
+function setActive(id) {
+  const btn = $(`.nav-btn[data-go="${id}"]`);
+  $$(".nav-btn").forEach(b => b.classList.toggle("active", b === btn));
+  moveIndicator(btn);
+}
+function goTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+document.addEventListener("click", e => {
+  const go = e.target.closest("[data-go]");
+  if (!go) return;
+  e.preventDefault();
+  if (go.hasAttribute("data-exit")) {
+    // KELUAR: kembali ke sampul
+    goTo("mulai");
+    return;
+  }
+  goTo(go.dataset.go);
+});
+// Tab aktif mengikuti bagian yang sedang terlihat
+const navIO = new IntersectionObserver(entries => {
+  entries.forEach(en => { if (en.isIntersecting) setActive(en.target.id); });
+}, { threshold: 0.5 });
+["profil", "project", "kontak"].forEach(id => navIO.observe(document.getElementById(id)));
+$("#mulai") && new IntersectionObserver(en => {
+  if (en[0].isIntersecting) setActive("none");
+}, { threshold: 0.6 }).observe($("#mulai"));
+window.addEventListener("resize", () => {
+  const act = $(".nav-btn.active");
+  moveIndicator(act);
+});
+
+/* ---------- Animasi muncul saat di-scroll ---------- */
+const revealIO = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.isIntersecting) { en.target.classList.add("in"); revealIO.unobserve(en.target); }
+  });
+}, { threshold: 0.15 });
+
+/* ---------- Percikan api di sekitar foto profil ---------- */
+function startSparks(canvas) {
+  const ctx = canvas.getContext("2d");
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const parts = [];
+  let W = 0, H = 0, running = false, raf = 0;
+
+  function size() {
+    const r = canvas.getBoundingClientRect();
+    W = r.width; H = r.height;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function spawn() {
+    parts.push({
+      x: W * (0.2 + Math.random() * 0.6),
+      y: H * (0.6 + Math.random() * 0.35),
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: -(0.25 + Math.random() * 0.6),
+      r: 0.8 + Math.random() * 1.9,
+      life: 0,
+      max: 120 + Math.random() * 120,
+      warm: Math.random(),
+    });
+  }
+  function frame() {
+    if (!running) return;
+    ctx.clearRect(0, 0, W, H);
+    if (parts.length < 36 && Math.random() < 0.45) spawn();
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const p = parts[i];
+      p.life++;
+      p.x += p.vx + Math.sin((p.life + i) * 0.05) * 0.15;
+      p.y += p.vy;
+      const t = p.life / p.max;
+      if (t >= 1) { parts.splice(i, 1); continue; }
+      const alpha = (1 - t) * (0.5 + 0.5 * Math.sin(p.life * 0.3));
+      const color = p.warm < 0.7
+        ? `255,${Math.floor(120 + p.warm * 80)},40`   // oranye
+        : `200,16,46`;                                  // merah
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(${color},${alpha})`;
+      ctx.arc(p.x, p.y, p.r * (1 - t * 0.5), 0, Math.PI * 2);
+      ctx.fill();
+    }
+    raf = requestAnimationFrame(frame);
+  }
+  // Hanya berjalan saat terlihat supaya ringan
+  new IntersectionObserver(en => {
+    if (en[0].isIntersecting && !running) { running = true; frame(); }
+    else if (!en[0].isIntersecting) { running = false; cancelAnimationFrame(raf); }
+  }).observe(canvas);
+  new ResizeObserver(size).observe(canvas);
+  size();
+}
+
+/* ---------- Modal detail project ---------- */
+const modal = $("#modal");
+let lastFocus = null;
+function openModal(p) {
+  $("#m-img").innerHTML = p.img
+    ? `<img src="${esc(p.img)}" alt="${esc(p.judul)}" onerror="this.remove()">`
+    : `<div class="ph-big">${txt("[Gambar besar: " + p.judul + "]")}</div>`;
+  $("#m-jenis").innerHTML = txt(p.jenis);
+  $("#m-judul").innerHTML = txt(p.judul);
+  $("#m-tahun").innerHTML = txt(p.tahun);
+  $("#m-desc").innerHTML = txt(p.deskripsi);
+  lastFocus = document.activeElement;
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden", "false");
+  $("#modal-close").focus();
+}
+function closeModal() {
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden", "true");
+  if (lastFocus) lastFocus.focus();
+}
+$("#bento").addEventListener("click", e => {
+  const t = e.target.closest(".tile");
+  if (t) openModal(DATA.projects[+t.dataset.i]);
+});
+$("#modal-close").addEventListener("click", closeModal);
+modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && modal.classList.contains("open")) closeModal(); });
+
+/* ---------- Kursor kustom ---------- */
+if (window.matchMedia("(pointer:fine)").matches) {
+  document.body.classList.add("has-cursor");
+  const dot = $("#cur-dot"), ring = $("#cur-ring");
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  window.addEventListener("mousemove", e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + "px"; dot.style.top = my + "px";
+  });
+  (function loop() {
+    rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18;
+    ring.style.left = rx + "px"; ring.style.top = ry + "px";
+    requestAnimationFrame(loop);
+  })();
+  document.addEventListener("mouseover", e => {
+    ring.classList.toggle("hover", !!e.target.closest("a,button,.tile,.chip,.app"));
+  });
+}
+
+/* ---------- Jalankan ---------- */
+render();
+// Pecah judul menjadi huruf agar bisa dianimasikan satu per satu
+$(".judul-huruf").innerHTML = [...DATA.judulHero].map((c, i) => `<span class="ch" style="--i:${i}">${esc(c)}</span>`).join("");
+$$(".rv, .tile").forEach(el => revealIO.observe(el));
+startSparks($("#sparks"));
+// Ketika tile dirender ulang, amati juga
+$$(".tile").forEach(el => revealIO.observe(el));
+requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add("is-loaded")));
+setTimeout(() => setActive("none"), 0);
+</script>
+</body>
+</html>
