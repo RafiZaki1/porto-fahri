@@ -484,6 +484,59 @@ button,a{font-family:inherit}
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .anim,.anim-l,.rv,.tile{opacity:1!important;transform:none!important}
 }
+
+/* ---------- SAMPUL GAYA POSTER (menggantikan sampul lama) ---------- */
+.hero-cover{
+  --poster-cream:#EDE0C8;
+  height:100vh;min-height:100vh;padding:0;justify-content:center;
+  background:transparent; /* latar memakai lapisan global .bg-fixed, sama dengan bagian bawah */
+  color:var(--poster-cream);
+}
+/* Judul: lapisan solid (z 1) dan lapisan garis tepi (z 3) dengan ukuran & posisi sama */
+.hero-cover .hc-title{
+  position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+  z-index:1;margin:0;text-align:center;white-space:nowrap;display:block;
+  font-family:Anton,Impact,sans-serif;font-weight:400;
+  font-size:clamp(48px,19vw,300px);line-height:1;letter-spacing:0;
+  background:none;color:var(--poster-cream);-webkit-text-fill-color:var(--poster-cream);
+  filter:none;
+}
+.hero-cover .hc-outline{
+  z-index:3;pointer-events:none;
+  color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:2px var(--poster-cream);
+}
+.hero-cover .hc-photo{
+  position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  height:88vh;width:auto;max-width:100vw;z-index:2;object-fit:contain;
+  user-select:none;-webkit-user-drag:none;
+}
+/* Keterangan pojok */
+.hero-cover .hc-tl,
+.hero-cover .hc-bl,
+.hero-cover .hc-br{
+  position:absolute;z-index:4;margin:0;
+  font:500 15px/1.3 Montserrat,sans-serif;letter-spacing:.5px;color:var(--poster-cream);
+}
+.hero-cover .hc-tl{left:5vw;top:104px}
+.hero-cover .hc-bl{left:5vw;bottom:40px}
+.hero-cover .hc-br{right:5vw;bottom:40px}
+.hero-cover .hc-arrow{
+  position:absolute;right:5vw;top:104px;z-index:4;width:80px;color:var(--poster-cream);
+}
+.hero-cover .hc-arrow svg{width:100%;height:auto;display:block}
+/* Judul poster tidak perlu animasi huruf naik */
+.hero-cover .ch{
+  opacity:1!important;transform:none!important;animation:none!important;
+  color:inherit!important;text-shadow:none!important;
+}
+@media (max-width:700px){
+  .hero-cover .hc-tl{top:84px;font-size:13px}
+  .hero-cover .hc-arrow{top:88px;width:56px}
+  .hero-cover .hc-photo{height:70vh}
+  .hero-cover .hc-bl,
+  .hero-cover .hc-br{bottom:20px;font-size:13px}
+}
 </style>
 </head>
 <body>
@@ -523,40 +576,24 @@ button,a{font-family:inherit}
 
 <main>
 
-  <!-- ===== 1. SAMPUL ===== -->
-  <section id="mulai" class="screen hero">
-    <div class="glow g-tl"></div>
-    <div class="glow g-br"></div>
-
-    <div class="hero-core" aria-hidden="true">
-      <!-- Visual tengah sampul: cincin berputar dan kabel jaringan -->
-      <svg class="core-svg" viewBox="0 0 500 400">
-        <g class="spin-group" fill="none" stroke="rgba(191,221,245,.28)" stroke-width="1.2">
-          <circle cx="250" cy="200" r="70"/>
-          <circle cx="250" cy="200" r="120"/>
-          <circle cx="250" cy="200" r="175" stroke-dasharray="4 8"/>
-        </g>
-        <path d="M40 330C120 260 160 370 240 300S360 250 430 320" fill="none" stroke="#05070B" stroke-width="10" stroke-linecap="round" opacity=".5"/>
-        <path d="M40 330C120 260 160 370 240 300S360 250 430 320" fill="none" stroke="#BFDDF5" stroke-width="1.5" opacity=".75"/>
-        <path d="M120 90L250 200L400 110" fill="none" stroke="rgba(191,221,245,.4)" stroke-width="1"/>
-        <g fill="#BFDDF5">
-          <circle cx="250" cy="200" r="4"/><circle cx="120" cy="90" r="3.5"/><circle cx="400" cy="110" r="3.5"/>
-        </g>
-      </svg>
-    </div>
-
-    <div class="hero-text">
-      <h1 class="hero-title">
-        <span class="judul-huruf" data-bind="judulHero">PORTFOLIO</span>
-      </h1>
-      <div class="badge anim" style="--d:.45s"><i aria-hidden="true"></i><span data-bind="label">DESAINER &amp; TEKNISI JARINGAN</span></div>
-    </div>
-
-    <div class="game-menu">
-      <button class="mi anim" style="--d:.6s" data-go="profil">MULAI</button>
-      <button class="mi anim" style="--d:.75s" data-go="tentang">TENTANG</button>
-      <button class="mi anim" style="--d:.9s" data-go="mulai" data-exit>KELUAR</button>
-    </div>
+  <!-- ===== 1. SAMPUL (gaya poster: judul besar, foto di tengah) ===== -->
+  <section id="mulai" class="screen hero hero-cover">
+    <!-- Keterangan pojok kiri atas -->
+    <p class="hc-tl" data-bind="label">DESAINER &amp; TEKNISI JARINGAN</p>
+    <!-- Panah ke profil -->
+    <a class="hc-arrow" href="#profil" aria-label="Lihat profil">
+      <svg viewBox="0 0 80 20" aria-hidden="true"><path d="M0 10H78M70 2L78 10L70 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <!-- Lapisan 1: judul solid, berada di belakang foto -->
+    <h1 class="hc-title hero-title"><span class="judul-huruf" data-bind="judulHero">PORTOFOLIO</span></h1>
+    <!-- Lapisan 2: foto (pakai foto yang sudah ada di proyek) -->
+    <img class="hc-photo" src="assets/foto-cutout.png" alt="Foto Fahri">
+    <!-- Lapisan 3: judul versi garis tepi, di depan foto -->
+    <!-- EDIT: teks ini harus sama dengan judulHero di DATA -->
+    <div class="hc-title hc-outline" aria-hidden="true">PORTOFOLIO</div>
+    <!-- Keterangan pojok bawah -->
+    <p class="hc-bl" data-bind="namaSingkat">Fahri Aditya Putra Rahmad</p>
+    <p class="hc-br" data-bind="tahun">2026</p>
   </section>
 
   <!-- ===== 2. PROFIL ===== -->
